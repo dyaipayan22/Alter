@@ -22,7 +22,9 @@ router.use(verifyJWT);
 
 router.route('/review').post(createProductReview);
 
-router.post('/', createProduct);
+router.use(admin);
+
+router.post('/add', createProduct);
 router.route('/:id').put(updateProduct).delete(deleteProduct);
 
 export default router;

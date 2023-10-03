@@ -6,7 +6,7 @@ import {
 } from '../utils/generateToken.js';
 
 //@desc   Login user
-//@route  POST api/auth
+//@route  POST /auth
 //@access Public
 export const login = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -16,26 +16,27 @@ export const login = expressAsyncHandler(async (req, res) => {
     throw new Error('All fields are required');
   }
 
-  const user = User.findOne({ email });
+  const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    const accessToken = generateAccessToken(user._id);
+    const accessToken = generateAccessToken(user._id, user.role);
     const refreshToken = generateRefreshToken(user._id);
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
+      secure: false,
+      sameSite: 'None',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
     res.json({ accessToken });
   } else {
     res.status(401);
-    throw new Error('Unauthorized');
+    throw new Error('Invalid email or password');
   }
 });
 
 //@desc   Refresh
-//@route  GET api/auth/refresh
+//@route  GET auth/refresh
 //@access Public
 export const refresh = expressAsyncHandler(async (req, res) => {
   const cookies = req.cookies;
@@ -60,7 +61,7 @@ export const refresh = expressAsyncHandler(async (req, res) => {
 });
 
 //@desc   Logout
-//@route  POST api/auth/logout
+//@route  POST auth/logout
 //@access Public
 export const logout = expressAsyncHandler(async (req, res) => {
   const cookies = req.cookies;

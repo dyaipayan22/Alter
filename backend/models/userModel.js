@@ -3,11 +3,23 @@ import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
+    name: { type: String, required: [true, 'Name cannot be empty'] },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, 'Email cannot be empty'],
+    },
+    password: { type: String, required: [true, 'Password cannot be empty'] },
     image: { type: String, required: true, default: 'placeholder.jpg' },
-    isAdmin: { type: Boolean, default: false },
+    role: {
+      type: String,
+      enum: {
+        values: ['user', 'admin'],
+        message: '{VALUE} is not a valid role',
+      },
+      required: true,
+      default: 'user',
+    },
   },
   {
     timestamps: true,

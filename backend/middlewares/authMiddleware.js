@@ -9,7 +9,8 @@ export const verifyJWT = expressAsyncHandler(async (req, res, next) => {
     try {
       const token = authHeader.split(' ')[1];
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      req.user = await User.findById(decoded.id);
+      req.user = await User.findById(decoded.UserInfo.id);
+      req.role = decoded.UserInfo.role;
       next();
     } catch (error) {
       res.status(401);
@@ -22,7 +23,7 @@ export const verifyJWT = expressAsyncHandler(async (req, res, next) => {
 });
 
 export const admin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
+  if (req.user && req.user.role === 'admin') {
     next();
   } else {
     res.status(401);

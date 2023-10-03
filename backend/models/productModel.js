@@ -25,19 +25,46 @@ const productSchema = mongoose.Schema(
     // },
     name: {
       type: String,
-      required: true,
+      required: [true, 'Name cannot be empty'],
     },
     image: [{ type: String, required: true }],
     category: {
       type: String,
-      required: true,
+      required: [true, 'Category cannot be empty'],
     },
-    brand: { type: String, required: true },
-    gender: { type: String, required: true, enum: [Male, Female, Unisex] },
-    sizes: { type: String, required: true, enum: [XXS, XS, S, M, L, XL, XXL] },
+    brand: { type: String, required: [true, 'Brand cannot be empty'] },
+    gender: {
+      type: String,
+      required: [true, 'Gender cannot be empty'],
+      enum: {
+        values: ['Male', 'Female', 'Unisex'],
+        message: '{VALUE} is not valid',
+      },
+    },
+    variants: [
+      {
+        size: {
+          type: String,
+          required: [true, 'Size cannot be empty'],
+          enum: {
+            values: ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'],
+            message: '{VALUE} is not a valid size',
+          },
+        },
+        quantity: {
+          type: Number,
+          required: [true, 'Quantity cannot be empty'],
+          default: 0,
+        },
+        color: {
+          type: String,
+          required: [true, 'Color cannot be empty'],
+        },
+      },
+    ],
     description: {
       type: String,
-      required: true,
+      required: [true, 'Product description cannot be empty'],
     },
     reviews: [reviewSchema],
     rating: {
@@ -52,12 +79,12 @@ const productSchema = mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true,
+      required: [true, 'Price cannot be empty'],
     },
     stock: {
       type: Number,
       required: true,
-      default: 1,
+      default: 0,
     },
     isFeatured: {
       type: Boolean,
@@ -69,6 +96,15 @@ const productSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+productSchema.pre('save', function (next) {
+  const totalQty = this.variants.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+  this.stock = totalQty;
+  next();
+});
 
 const Product = mongoose.model('Product', productSchema);
 

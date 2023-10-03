@@ -2,7 +2,7 @@ import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 
 //@desc   Fetch all products
-//@route  GET api/product/
+//@route  GET /product
 //@access Public
 export const getProducts = expressAsyncHandler(async (req, res) => {
   // const pageSize = 10;
@@ -26,7 +26,7 @@ export const getProducts = expressAsyncHandler(async (req, res) => {
 });
 
 //@desc   Fetch single product
-//@route  GET api/products/:id
+//@route  GET /product/:id
 //@access Public
 export const getProductById = expressAsyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
@@ -39,7 +39,7 @@ export const getProductById = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Create a product
-// @route   POST /api/products
+// @route   POST /product
 // @access  Private/Admin
 export const createProduct = expressAsyncHandler(async (req, res) => {
   const {
@@ -48,7 +48,7 @@ export const createProduct = expressAsyncHandler(async (req, res) => {
     category,
     brand,
     gender,
-    sizes,
+    variants,
     description,
     price,
     stock,
@@ -60,7 +60,7 @@ export const createProduct = expressAsyncHandler(async (req, res) => {
     category,
     brand,
     gender,
-    sizes,
+    variants,
     description,
     price,
     stock,
@@ -73,7 +73,7 @@ export const createProduct = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Update a product
-// @route   PUT /api/products/:id
+// @route   PUT /product/:id
 // @access  Private/Admin
 export const updateProduct = expressAsyncHandler(async (req, res) => {
   const {
@@ -82,7 +82,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
     category,
     brand,
     gender,
-    sizes,
+    variants,
     description,
     price,
     stock,
@@ -97,7 +97,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
     product.category = category || product.category;
     product.brand = brand || product.brand;
     product.gender = gender || product.gender;
-    product.sizes = sizes || product.sizes;
+    product.variants = variants || product.variants;
     product.description = description || product.description;
     product.price = price || product.price;
     product.stock = stock || product.stock;
@@ -112,7 +112,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete a product
-// @route   DELETE /api/products/:id
+// @route   DELETE /product/:id
 // @access  Private/Admin
 export const deleteProduct = expressAsyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
@@ -128,7 +128,7 @@ export const deleteProduct = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Create new review
-// @route   POST /api/products/:id/reviews
+// @route   POST /product/:id/reviews
 // @access  Private
 export const createProductReview = expressAsyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
@@ -169,7 +169,7 @@ export const createProductReview = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Get featured products
-// @route   GET /api/products/featured
+// @route   GET /product/featured
 // @access  Public
 export const getFeaturedProducts = expressAsyncHandler(async (req, res) => {
   const products = await Product.find({ isFeatured: true });
