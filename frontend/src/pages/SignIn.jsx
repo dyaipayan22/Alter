@@ -1,48 +1,55 @@
-import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import Input from '../components/inputs/Input';
+import Button from '../components/ui/Button';
+
+import { login } from '../features/auth/authSlice';
 
 const SignIn = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const formSchema = z.object({
+    email: z.string().min(1, 'Enter your email').email('Invalid email'),
+    password: z.string().min(1, 'Enter your password'),
+  });
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
+    resolver: zodResolver(formSchema),
   });
 
   const onSubmit = (values) => {
-    setIsLoading(true);
+    console.log(values);
+    dispatch(login(values));
   };
 
   return (
-    <div className="w-full h-screen bg-slate-400">
+    <div className="w-full h-screen container">
       <div className="flex items-center">
-        <div className="bg-indigo-400 w-1/2 h-full">
+        <div className="w-1/2 h-full flex flex-col gap-4">
           <Input
             id="email"
             label="Email"
             type="text"
-            disabled={isLoading}
+            disabled={isSubmitting}
             register={register}
             errors={errors}
-            required
           />
           <Input
             id="password"
             label="Password"
             type="text"
-            disabled={isLoading}
+            disabled={isSubmitting}
             register={register}
             errors={errors}
-            required
           />
+          <Button label="Sign In" onClick={handleSubmit(onSubmit)} size="md" />
         </div>
       </div>
     </div>

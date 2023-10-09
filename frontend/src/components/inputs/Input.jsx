@@ -1,14 +1,17 @@
 const Input = ({ id, label, type, disabled, register, required, errors }) => {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id}>{label}</label>
       <input
         id={id}
         type={type}
         disabled={disabled}
-        {...register(id, { required })}
-        className=""
+        {...register(id)}
+        className={`outline-none p-2 border rounded-md bg-transparent ${
+          errors[id] ? 'border-red-500' : 'border-blue-500'
+        }`}
       />
-      <label>{label}</label>
+      {errors[id] && <span>{errors[id]?.message}</span>}
     </div>
   );
 };
