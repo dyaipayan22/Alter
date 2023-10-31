@@ -1,12 +1,11 @@
-// import { forwardRef } from 'react';
 import { cva } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
 
 const buttonVariants = cva('outline-none rounded-md', {
   variants: {
     variant: {
-      default: 'bg-orange-300 hover:bg-indigo-400',
-      outline: 'bg-black hover:bg-white',
+      default: 'bg-primary text-white font-medium',
+      outline: 'ring-[1px] ring-primary ring-inset text-primary font-bold',
     },
     size: {
       sm: 'p-2',
@@ -20,7 +19,6 @@ const buttonVariants = cva('outline-none rounded-md', {
 });
 
 const Button = ({
-  ref,
   label,
   onClick,
   disabled,
@@ -35,7 +33,6 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(buttonVariants({ variant, size, className }))}
-      //ref={ref}
       {...props}
     >
       {label}

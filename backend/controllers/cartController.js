@@ -7,6 +7,8 @@ import Product from '../models/productModel.js';
 // @access  Private
 export const addToCart = expressAsyncHandler(async (req, res) => {
   const { product, quantity } = req.body;
+  console.log(product);
+  console.log(quantity);
 
   let cart = await Cart.findOne({ user: req.user._id });
 
@@ -17,7 +19,7 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const productExists = await Product.findById(productId);
+  const productExists = await Product.findById(product);
 
   if (!productExists) {
     res.status(404);
@@ -44,6 +46,7 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
 // @route   PUT /api/cart
 // @access  Private
 export const removeFromCart = expressAsyncHandler(async (req, res) => {
+  console.log(req.body);
   const { product } = req.body;
 
   const cart = await Cart.findOne({ user: req.user._id });
@@ -68,7 +71,7 @@ export const removeFromCart = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Clear cart
-// @route   PUT /api/cart
+// @route   PUT /api/cart/clear
 // @access  Private
 export const clearCart = expressAsyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id });

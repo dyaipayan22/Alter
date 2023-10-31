@@ -6,7 +6,7 @@ const UserLayout = () => {
   return (
     <div className="w-full min-h-screen relative flex flex-col">
       <Header />
-      <div className="grow bg-orange-200">
+      <div className="grow container bg-bgPrimary py-4 lg:py-8">
         <Outlet />
       </div>
       <Footer />

@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -10,6 +11,11 @@ import { login } from '../features/auth/authSlice';
 
 const SignIn = () => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+  const from = location.state?.from?.pathname || '/';
 
   const formSchema = z.object({
     email: z.string().min(1, 'Enter your email').email('Invalid email'),
@@ -24,9 +30,14 @@ const SignIn = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
-    dispatch(login(values));
+  const onSubmit = async (values) => {
+    try {
+      await dispatch(login(values));
+      console.log(from);
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

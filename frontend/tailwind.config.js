@@ -12,6 +12,10 @@ module.exports = {
       },
     },
     extend: {
+      colors: {
+        primary: '#2A977D',
+        bgPrimary: '#F9FAFB',
+      },
       fontFamily: {
         Inter: ['Inter', 'sans-serif'],
       },

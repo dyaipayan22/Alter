@@ -10,6 +10,7 @@ import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/product', productRoutes);
+app.use('/cart', cartRoutes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 
