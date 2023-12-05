@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "server": "nodemon backend/index",
-    "client": "npm run start --prefix frontend",
+    "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Dyaipayan Ghosh",

@@ -6,9 +6,7 @@ import Product from '../models/productModel.js';
 // @route   POST /api/cart
 // @access  Private
 export const addToCart = expressAsyncHandler(async (req, res) => {
-  const { product, quantity } = req.body;
-  console.log(product);
-  console.log(quantity);
+  const { product, quantity, size } = req.body;
 
   let cart = await Cart.findOne({ user: req.user._id });
 
@@ -27,7 +25,7 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
   }
 
   const existingItem = cart.cartItems.find(
-    (item) => item.product.toString() === product
+    (item) => item.product.toString() === product && item.size === size
   );
 
   if (existingItem) {
@@ -36,6 +34,7 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
     cart.cartItems.push({
       product,
       quantity,
+      size,
     });
   }
   await cart.save();
@@ -46,7 +45,6 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
 // @route   PUT /api/cart
 // @access  Private
 export const removeFromCart = expressAsyncHandler(async (req, res) => {
-  console.log(req.body);
   const { product } = req.body;
 
   const cart = await Cart.findOne({ user: req.user._id });
@@ -91,8 +89,8 @@ export const clearCart = expressAsyncHandler(async (req, res) => {
 // @route   GET /api/cart
 // @access  Private
 export const getCartItems = expressAsyncHandler(async (req, res) => {
-  const cart = Cart.findOne({ user: req.user._id }).populate({
-    path: 'product',
+  const cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: 'cartItems.product',
     select: '_id name image price',
     model: 'Product',
   });
@@ -102,7 +100,7 @@ export const getCartItems = expressAsyncHandler(async (req, res) => {
     throw new Error('Cart not found');
   }
 
-  const items = cart.cartItems.map((item) => ({
+  const items = cart?.cartItems?.map((item) => ({
     product: item.product,
     quantity: item.quantity,
   }));

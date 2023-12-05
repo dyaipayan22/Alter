@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import connectDB from './config/connectDatabase.js';
 import corsOptions from './config/corsOptions.js';
+import credentials from './middlewares/credentials.js';
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 
 import productRoutes from './routes/productRoutes.js';
@@ -17,6 +18,7 @@ connectDB();
 
 const app = express();
 
+app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());

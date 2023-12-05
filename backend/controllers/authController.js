@@ -1,4 +1,5 @@
 import expressAsyncHandler from 'express-async-handler';
+import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import {
   generateAccessToken,
@@ -6,7 +7,7 @@ import {
 } from '../utils/generateToken.js';
 
 //@desc   Login user
-//@route  POST /auth
+//@route  POST /
 //@access Public
 export const login = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -22,13 +23,16 @@ export const login = expressAsyncHandler(async (req, res) => {
     const accessToken = generateAccessToken(user._id, user.role);
     const refreshToken = generateRefreshToken(user._id);
 
+    const role = user.role;
+
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'None',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.json({ accessToken });
+
+    res.json({ accessToken, role });
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
@@ -36,7 +40,7 @@ export const login = expressAsyncHandler(async (req, res) => {
 });
 
 //@desc   Refresh
-//@route  GET auth/refresh
+//@route  GET /refresh
 //@access Public
 export const refresh = expressAsyncHandler(async (req, res) => {
   const cookies = req.cookies;
@@ -48,16 +52,24 @@ export const refresh = expressAsyncHandler(async (req, res) => {
 
   const refreshToken = cookies.jwt;
 
-  const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    async (err, decoded) => {
+      if (err) {
+        res.status(403);
+        throw new Error('Forbidden');
+      }
+      const foundUser = await User.findById(decoded.id);
+      if (!foundUser) {
+        res.status(401);
+        throw new Error('Unauthorized');
+      }
 
-  const foundUser = await User.findById(decoded.id);
-  if (!foundUser) {
-    res.status(401);
-    throw new Error('Unauthorized');
-  }
-
-  const accessToken = generateAccessToken(foundUser.id);
-  res.json({ accessToken });
+      const accessToken = generateAccessToken(foundUser.id);
+      res.json({ accessToken });
+    }
+  );
 });
 
 //@desc   Logout
@@ -65,6 +77,7 @@ export const refresh = expressAsyncHandler(async (req, res) => {
 //@access Public
 export const logout = expressAsyncHandler(async (req, res) => {
   const cookies = req.cookies;
+  console.log(cookies);
   if (!cookies.jwt) {
     res.status(204);
     throw new Error('No cookie');

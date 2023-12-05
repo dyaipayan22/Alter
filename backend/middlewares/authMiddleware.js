@@ -5,21 +5,21 @@ import User from '../models/userModel.js';
 export const verifyJWT = expressAsyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
 
-  if (authHeader?.startsWith('Bearer')) {
-    try {
-      const token = authHeader.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      req.user = await User.findById(decoded.UserInfo.id);
-      req.role = decoded.UserInfo.role;
-      next();
-    } catch (error) {
-      res.status(401);
-      throw new Error('Not authorized');
-    }
-  } else {
+  if (!authHeader?.startsWith('Bearer ')) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error('Unauthorized');
   }
+
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
+    if (err) {
+      res.status(403);
+      throw new Error('Forbidden');
+    }
+    req.user = await User.findById(decoded.UserInfo.id);
+    req.role = decoded.UserInfo.role;
+    next();
+  });
 });
 
 export const admin = (req, res, next) => {
