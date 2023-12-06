@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+// const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+// const uploadUrl = import.meta.env.VITE_CLOUDINARY_UPLOAD_URL;
+
 export const cloudinaryImageUpload = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -8,5 +11,5 @@ export const cloudinaryImageUpload = async (file) => {
     'https://api.cloudinary.com/v1_1/drahtawrd/image/upload',
     formData
   );
-  return { publicId: data?.public_id, url: data?.secure_url };
+  return { publicId: data?.public_id, secureUrl: data?.secure_url };
 };

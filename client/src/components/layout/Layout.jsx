@@ -8,8 +8,10 @@ const Layout = () => {
     <div className="w-full min-h-screen relative flex flex-col">
       {/* <Header /> */}
       <Navbar />
-      <div className="grow bg-bgPrimary py-4 lg:py-8">
-        <Outlet />
+      <div className="grow py-4 lg:py-8">
+        <div className="container">
+          <Outlet />
+        </div>
       </div>
       <Footer />
     </div>

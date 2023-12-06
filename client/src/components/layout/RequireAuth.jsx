@@ -1,6 +1,5 @@
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import { selectAuthInfo } from '../../features/auth/authSlice';
 
 const RequireAuth = ({ allowedRole }) => {
   const user = useSelector((state) => state.auth.authInfo);

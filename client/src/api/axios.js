@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.REACT_APP_API_URL;
+const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
-export default axios.create({ baseURL: BASE_URL });
+export const axiosPublic = axios.create({ baseURL: BASE_URL });
 
 export const axiosPrivate = axios.create({
   baseURL: BASE_URL,

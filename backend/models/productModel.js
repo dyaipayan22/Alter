@@ -27,7 +27,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, 'Name cannot be empty'],
     },
-    image: [{ type: String, required: true }],
+    images: [{ type: String, required: true }],
     category: {
       type: String,
       required: [true, 'Category cannot be empty'],
@@ -60,10 +60,6 @@ const productSchema = mongoose.Schema(
           type: String,
           required: [true, 'Color cannot be empty'],
         },
-        // image: {
-        //   type: String,
-        //   required: [true, 'Image cannot be empty'],
-        // },
       },
     ],
     description: {

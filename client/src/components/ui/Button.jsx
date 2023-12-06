@@ -1,15 +1,15 @@
 import { cva } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
 
-const buttonVariants = cva('outline-none rounded-md w-full', {
+const buttonVariants = cva('outline-none rounded-md ', {
   variants: {
     variant: {
       default: 'bg-primary text-white font-medium',
       outline: 'ring-[1px] ring-primary ring-inset text-primary font-bold',
     },
     size: {
-      sm: 'p-2',
-      md: 'p-4',
+      sm: 'py-2 px-4',
+      md: 'py-4 px-8',
     },
   },
   defaultVariants: {

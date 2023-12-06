@@ -44,7 +44,7 @@ export const getProductById = expressAsyncHandler(async (req, res) => {
 export const createProduct = expressAsyncHandler(async (req, res) => {
   const {
     name,
-    image,
+    images,
     category,
     brand,
     gender,
@@ -56,7 +56,7 @@ export const createProduct = expressAsyncHandler(async (req, res) => {
   } = req.body;
   const product = await Product.create({
     name,
-    image,
+    images,
     category,
     brand,
     gender,
@@ -78,7 +78,7 @@ export const createProduct = expressAsyncHandler(async (req, res) => {
 export const updateProduct = expressAsyncHandler(async (req, res) => {
   const {
     name,
-    image,
+    images,
     category,
     brand,
     gender,
@@ -93,7 +93,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
 
   if (product) {
     product.name = name || product.name;
-    product.image = image || product.image;
+    product.images = images || product.images;
     product.category = category || product.category;
     product.brand = brand || product.brand;
     product.gender = gender || product.gender;

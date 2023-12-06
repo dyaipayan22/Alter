@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
+import { Trash } from 'lucide-react';
 
 import Input from '../../components/inputs/Input';
 import Checkbox from '../../components/inputs/Checkbox';
@@ -12,15 +13,13 @@ import Preview from '../image/Preview';
 const STEPS = {
   DESCRIPTION: 0,
   VARIANTS: 1,
-  PRICE: 2,
+  IMAGES: 2,
+  PRICE: 3,
 };
 
 const ProductForm = () => {
   const [formStep, setFormStep] = useState(STEPS.DESCRIPTION);
-  // const [productImages, setProductImages] = useState([]);
-  // const [imagePreview, setImagePreview] = useState([]);
-
-  const [image, setImage] = useState([]);
+  const [productImages, setProductImages] = useState([]);
 
   const {
     register,
@@ -34,9 +33,10 @@ const ProductForm = () => {
     defaultValues: {
       name: '',
       category: '',
+      images: [],
       brand: '',
       gender: '',
-      variants: [{ size: '', quantity: 1, color: '', images: [] }],
+      variants: [{ size: '', quantity: 1, color: '' }],
       description: '',
       price: 1,
       stock: 1,
@@ -62,7 +62,6 @@ const ProductForm = () => {
       size: '',
       quantity: 1,
       color: '',
-      images: [],
     });
   };
 
@@ -92,9 +91,9 @@ const ProductForm = () => {
     return 'Back';
   }, [formStep]);
 
-  const handleImageChange = (e, index) => {
+  const handleImageChange = (e) => {
     const files = e.target.files;
-    const arrImg = [];
+    const arrImg = [...productImages];
 
     for (let i = 0; i < files.length; i++) {
       const uploadImage = files[i];
@@ -103,39 +102,35 @@ const ProductForm = () => {
         upload: uploadImage,
         preview: previewImage,
       };
-      arrImg.push(previewImage);
+      arrImg.push(imageFile);
     }
-    setValue(`variants.${index}.images`, arrImg);
+    setProductImages(arrImg);
   };
 
-  const handleImageUpload = async (e) => {
-    // console.log(getValues('variants'));
-    const variants = getValues('variants');
-    const variantImages = variants.map((variant) => variant.images);
-    console.log(variantImages);
-    // try {
-    //   let arr = [];
-    //   for (let i = 0; i < productImages.length; i++) {
-    //     const data = await cloudinaryImageUpload(productImages[i]);
-    //     arr.push(data);
-    //   }
-    //   const updatedVariants = control.getValues('variants').map((variant) => ({
-    //     ...variant,
-    //     images: [...variant.images, arr],
-    //   }));
+  // const removeImage = (index) => {
+  //   const newImg = images.splice(index, 1);
+  //   setImages(newImg);
+  // };
 
-    //   control.setValue('variants', updatedVariants);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+  const handleImageUpload = async () => {
+    const uploadedImages = [];
+    try {
+      for (let i = 0; i < productImages.length; i++) {
+        const imageFile = productImages[i].upload;
+        const data = await cloudinaryImageUpload(imageFile);
+        uploadedImages.push(data);
+      }
+      setValue('images', uploadedImages);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onSubmit = (data) => {
     if (formStep !== STEPS.PRICE) {
       return onNext();
     }
-    const variants = getValues('variants');
-    const arrImg = variants.map((variant) => variant.images);
+    console.log(data);
   };
 
   let formBody = (
@@ -258,31 +253,45 @@ const ProductForm = () => {
                 register={register}
                 errors={errors}
               />
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => handleImageChange(e, index)}
-              />
-              {/* {field.images.length > 0 && (
-                <div className="variant-images">
-                  {field.images.map((imageUrl) => (
-                    <img
-                      key={imageUrl}
-                      src={imageUrl}
-                      alt="Variant Image"
-                      className="thumbnail"
-                    />
-                  ))}
-                </div>
-              )} */}
-              {/* <Button label="Upload" onClick={handleImageUpload} /> */}
               {index > 0 && (
                 <Button label="Remove Variant" onClick={removeVariant} />
               )}
             </section>
           );
         })}
+      </div>
+    );
+  }
+
+  if (formStep === STEPS.IMAGES) {
+    formBody = (
+      <div>
+        <span className="text-2xl">Upload images here</span>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+        />
+        {productImages.length > 0 && (
+          <div className="flex gap-6 justify-center">
+            {productImages.map((image, index) => (
+              <div className="relative" key={index}>
+                <img
+                  src={image.preview}
+                  alt="Image"
+                  key={index}
+                  className="h-[280px] w-[210px] object-cover"
+                />
+                <Trash
+                  className="absolute h-4 w-4 top-4 right-4"
+                  // onClick={removeImage(index)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+        <Button label={'Upload'} onClick={handleImageUpload} />
       </div>
     );
   }
@@ -334,9 +343,6 @@ const ProductForm = () => {
         secondaryAction={onBack}
         onSubmit={handleSubmit(onSubmit)}
       />
-      {/* {formBody} */}
-      {/* <Button label="Add Product" onClick={handleSubmit(onSubmit)} /> */}
-      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
     </div>
   );
 };
