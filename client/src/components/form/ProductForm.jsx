@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Trash } from 'lucide-react';
 
 import Input from '../../components/inputs/Input';
@@ -9,6 +10,7 @@ import Form from './Form';
 
 import { cloudinaryImageUpload } from '.././../utils/cloudinaryImageUpload';
 import Preview from '../image/Preview';
+import { createProduct } from '../../features/product/productApi';
 
 const STEPS = {
   DESCRIPTION: 0,
@@ -18,7 +20,10 @@ const STEPS = {
 };
 
 const ProductForm = () => {
+  const dispatch = useDispatch();
+
   const [formStep, setFormStep] = useState(STEPS.DESCRIPTION);
+  const [loading, setLoading] = useState(false);
   const [productImages, setProductImages] = useState([]);
 
   const {
@@ -94,6 +99,7 @@ const ProductForm = () => {
   const handleImageChange = (e) => {
     const files = e.target.files;
     const arrImg = [...productImages];
+    setLoading(true);
 
     for (let i = 0; i < files.length; i++) {
       const uploadImage = files[i];
@@ -105,6 +111,7 @@ const ProductForm = () => {
       arrImg.push(imageFile);
     }
     setProductImages(arrImg);
+    setLoading(false);
   };
 
   // const removeImage = (index) => {
@@ -130,7 +137,7 @@ const ProductForm = () => {
     if (formStep !== STEPS.PRICE) {
       return onNext();
     }
-    console.log(data);
+    dispatch(createProduct(data));
   };
 
   let formBody = (
@@ -291,7 +298,11 @@ const ProductForm = () => {
             ))}
           </div>
         )}
-        <Button label={'Upload'} onClick={handleImageUpload} />
+        <Button
+          label={'Upload'}
+          onClick={handleImageUpload}
+          disabled={loading}
+        />
       </div>
     );
   }

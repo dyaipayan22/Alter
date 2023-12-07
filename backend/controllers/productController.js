@@ -5,24 +5,35 @@ import Product from '../models/productModel.js';
 //@route  GET /product
 //@access Public
 export const getProducts = expressAsyncHandler(async (req, res) => {
-  // const pageSize = 10;
-  // const page = Number(req.query.pageNumber) || 1;
+  const limit = 10;
+  const page = Number(req.query.page) || 1;
 
-  // const keyword = req.query.keyword
-  //   ? {
-  //       name: {
-  //         $regex: req.query.keyword,
-  //         $options: 'i',
-  //       },
-  //     }
-  //   : {};
-  // const count = await Product.countDocuments();
-  // const products = await Product.find({ ...keyword })
-  //   .limit(pageSize)
-  //   .skip(pageSize * (page - 1));
-  // res.json({ products, page, pages: Math.ceil(count / pageSize) });
-  const products = await Product.find({});
-  res.json(products);
+  const search = req.query.search
+    ? {
+        name: {
+          $regex: req.query.search,
+          $options: 'i',
+        },
+      }
+    : {};
+
+  let sortBy = { rating: -1 };
+  if (req.query.sort) {
+    const parts = req.query.sort.split(':');
+    sortBy[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+  }
+
+  const count = await Product.countDocuments();
+  const products = await Product.find({ ...search })
+    .sort(sortBy)
+    .limit(limit)
+    .skip(limit * (page - 1));
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(count / limit),
+    results: count,
+  });
 });
 
 //@desc   Fetch single product

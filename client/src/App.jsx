@@ -29,13 +29,13 @@ const App = () => {
           <Route element={<RequireAuth allowedRole={'user'} />}>
             <Route path="/about" element={<About />} />
             <Route path="/checkout" element={<Checkout />} />
-            {/* <Route path="/cart" element={<Cart />} /> */}
+            <Route path="/cart" element={<Cart />} />
           </Route>
         </Route>
 
         <Route element={<AdminLayout />}>
-          <Route path="/admin/product/add" element={<AddProduct />} />
           <Route element={<RequireAuth allowedRole={'admin'} />}>
+            <Route path="/admin/product/add" element={<AddProduct />} />
             <Route path="/admin/products" element={<Products />} />
           </Route>
         </Route>

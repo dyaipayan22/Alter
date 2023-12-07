@@ -17,9 +17,9 @@ const ProductCard = ({
   reviews,
 }) => {
   return (
-    <div className="bg-white rounded-md ">
+    <div className="bg-white rounded-md items-center">
       <Link to={`/${name}/${_id}`}>
-        <div className="flex flex-col ">
+        <div className="flex flex-col w-full">
           <img
             src={image1}
             alt={name}

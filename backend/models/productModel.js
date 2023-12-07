@@ -27,7 +27,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, 'Name cannot be empty'],
     },
-    images: [{ type: String, required: true }],
+    images: [{ publicId: String, secureUrl: String }],
     category: {
       type: String,
       required: [true, 'Category cannot be empty'],
@@ -97,14 +97,14 @@ const productSchema = mongoose.Schema(
   }
 );
 
-productSchema.pre('save', function (next) {
-  const totalQty = this.variants.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
-  this.stock = totalQty;
-  next();
-});
+// productSchema.pre('save', function (next) {
+//   const totalQty = this.variants.reduce(
+//     (total, item) => total + item.quantity,
+//     0
+//   );
+//   this.stock = totalQty;
+//   next();
+// });
 
 const Product = mongoose.model('Product', productSchema);
 

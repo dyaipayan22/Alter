@@ -3,11 +3,14 @@ import { axiosPrivate, axiosPublic } from '../../api/axios';
 
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
-  async (_, rejectWithValue) => {
+  async ({ page, search, sort }, rejectWithValue) => {
     try {
-      const response = await axiosPublic.get('/product');
+      const params = { page, search, sort };
+      const config = { params };
+      const response = await axiosPublic.get('/product', config);
       return response?.data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data.message);
     }
   }

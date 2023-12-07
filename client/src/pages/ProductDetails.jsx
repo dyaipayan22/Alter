@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 import Radio from '../components/inputs/Radio';
 import Button from '../components/ui/Button';
-import { fetchSingleProduct } from '../features/product/productSlice';
+import { fetchProduct } from '../features/product/productApi';
 import Counter from '../components/inputs/Counter';
 import Gallery from '../components/image/Gallery';
 import Rating from '../components/Rating';
@@ -19,7 +19,9 @@ const ProductDetails = () => {
 
   const { productId } = useParams();
 
-  const { products, loading, isError } = useSelector((state) => state.product);
+  const { productInfo, loading, productError } = useSelector(
+    (state) => state.product
+  );
   const authInfo = useSelector((state) => state.auth.authInfo);
 
   const {
@@ -32,7 +34,7 @@ const ProductDetails = () => {
     variants,
     description,
     stock,
-  } = products;
+  } = productInfo;
 
   const {
     register,
@@ -59,7 +61,7 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchSingleProduct(productId));
+    dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
 
   const buyNow = async (values) => {

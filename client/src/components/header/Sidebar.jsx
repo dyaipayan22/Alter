@@ -18,7 +18,7 @@ const Sidebar = () => {
   };
   return (
     <div
-      className={`bg-white h-screen flex flex-col border-r shadow-sm duration-200 ${
+      className={`hidden  bg-white h-screen lg:flex flex-col border-r shadow-sm duration-200 ${
         open ? 'w-72' : 'w-20'
       }`}
     >

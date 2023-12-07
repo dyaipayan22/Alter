@@ -12,13 +12,13 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [showMobileNav, setShowMobileNav] = useState(false);
-  const authInfo = useSelector((state) => state.auth.authInfo);
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const toggleView = () => {
     setShowMobileNav(!showMobileNav);
   };
   return (
-    <div className="relative w-full flex items-center container py-3 z-30 border-2 lg:justify-between lg:gap-12">
+    <div className="relative bg-primary text-secondary w-full flex items-center container py-3 z-30 border-2 lg:justify-between lg:gap-12">
       <Link to={'/'}>Alter</Link>
 
       <div className="flex grow items-center justify-between">
@@ -31,8 +31,17 @@ const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-8">
-          <ShoppingCart className="cursor-pointer w-6 h-6" />
-          <Button label={'Sign In'} onClick={() => navigate('/sign-in')} />
+          <div className="relative">
+            <ShoppingCart />
+            <div className="absolute right-0 -top-2 bg-red-300 w-4 h-4 flex items-center justify-center rounded-full">
+              <span className=" text-white text-sm">1</span>
+            </div>
+          </div>
+          {userInfo ? (
+            <Button label={userInfo.name} />
+          ) : (
+            <Button label={'Sign In'} onClick={() => navigate('/sign-in')} />
+          )}
         </div>
       </div>
 

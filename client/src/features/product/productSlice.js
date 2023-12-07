@@ -1,37 +1,18 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
+import {
+  fetchProducts,
+  fetchProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from './productApi';
 
 const initialState = {
-  products: null,
+  allProducts: null,
+  productInfo: null,
   loading: false,
-  isError: null,
+  productError: null,
 };
-
-export const fetchAllProducts = createAsyncThunk(
-  'product/fetchAllProducts',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`http://localhost:8000/product`);
-      return response?.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data.message);
-    }
-  }
-);
-
-export const fetchSingleProduct = createAsyncThunk(
-  'product/fetchSingleProduct',
-  async (productId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/product/${productId}`
-      );
-      return response?.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data.message);
-    }
-  }
-);
 
 const productSlice = createSlice({
   name: 'product',
@@ -39,27 +20,49 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllProducts.pending, (state) => {
+      .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchAllProducts.fulfilled, (state, action) => {
+      .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.allProducts = action.payload;
       })
-      .addCase(fetchAllProducts.rejected, (state, action) => {
+      .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.isError = action.payload;
+        state.productError = action.payload;
       })
-      .addCase(fetchSingleProduct.pending, (state) => {
+      .addCase(fetchProduct.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
+      .addCase(fetchProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.productInfo = action.payload;
       })
-      .addCase(fetchSingleProduct.rejected, (state, action) => {
+      .addCase(fetchProduct.rejected, (state, action) => {
         state.loading = false;
-        state.isError = action.payload;
+        state.productError = action.payload;
+      })
+      .addCase(createProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.productInfo = action.payload;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.productError = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.productInfo = action.payload;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.productError = action.payload;
       });
   },
 });

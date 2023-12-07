@@ -13,8 +13,8 @@ export default {
     },
     extend: {
       colors: {
-        primary: '#2A977D',
-        bgPrimary: '#F9FAFB',
+        primary: '#35333F',
+        secondary: '#F2F3F5',
       },
       fontFamily: {
         Inter: ['Inter', 'sans-serif'],

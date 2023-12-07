@@ -4,7 +4,7 @@ import { addItem, removeItem, clearCart, getItems } from './cartApi';
 const initialState = {
   cartItems: null,
   loading: false,
-  isError: null,
+  cartError: null,
 };
 
 const cartSlice = createSlice({
@@ -22,7 +22,7 @@ const cartSlice = createSlice({
       })
       .addCase(addItem.rejected, (state, action) => {
         state.loading = false;
-        state.isError = action.payload;
+        state.cartError = action.payload;
       })
       .addCase(getItems.pending, (state) => {
         state.loading = true;
@@ -33,7 +33,7 @@ const cartSlice = createSlice({
       })
       .addCase(getItems.rejected, (state, action) => {
         state.loading = false;
-        state.isError = action.payload;
+        state.cartError = action.payload;
       })
       .addCase(removeItem.pending, (state) => {
         state.loading = true;
@@ -44,7 +44,7 @@ const cartSlice = createSlice({
       })
       .addCase(removeItem.rejected, (state, action) => {
         state.loading = false;
-        state.isError = action.payload;
+        state.cartError = action.payload;
       })
       .addCase(clearCart.pending, (state) => {
         state.loading = true;
@@ -55,7 +55,7 @@ const cartSlice = createSlice({
       })
       .addCase(clearCart.rejected, (state, action) => {
         state.loading = false;
-        state.isError = action.payload;
+        state.cartError = action.payload;
       });
   },
 });
