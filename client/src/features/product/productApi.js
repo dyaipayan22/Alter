@@ -3,7 +3,7 @@ import { axiosPrivate, axiosPublic } from '../../api/axios';
 
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
-  async ({ page, search, sort }, rejectWithValue) => {
+  async ({ page = 1, search = '', sort = {} }, rejectWithValue) => {
     try {
       const params = { page, search, sort };
       const config = { params };

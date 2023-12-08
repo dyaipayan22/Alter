@@ -7,6 +7,7 @@ import { NAV_LINKS } from '../../utils/constants';
 
 import Button from '../ui/Button';
 import Cart from '../../pages/Cart';
+import Search from '../Search';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Navbar = () => {
             </Link>
           ))}
         </ul>
-
+        <Search />
         <div className="flex items-center gap-8">
           <div className="relative">
             <ShoppingCart />

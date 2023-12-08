@@ -1,10 +1,45 @@
 import expressAsyncHandler from 'express-async-handler';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+
 import User from '../models/userModel.js';
 import {
   generateAccessToken,
   generateRefreshToken,
 } from '../utils/generateToken.js';
+
+dotenv.config();
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({
+        email: profile.emails[0].value,
+      });
+
+      if (existingUser) return done(null, existingUser);
+
+      const newUser = await User.create({
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        image: profile.photos[0].value,
+        googleSignup: true,
+      });
+
+      accessToken = generateAccessToken(newUser._id, newUser.role);
+      refreshToken = generateRefreshToken(newUser._id);
+
+      return done(null, { accessToken, role });
+    }
+  )
+);
 
 //@desc   Login user
 //@route  POST /

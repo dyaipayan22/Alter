@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import passport from 'passport';
 
 import connectDB from './config/connectDatabase.js';
 import corsOptions from './config/corsOptions.js';
@@ -18,6 +19,7 @@ connectDB();
 
 const app = express();
 
+app.use(passport.initialize());
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());

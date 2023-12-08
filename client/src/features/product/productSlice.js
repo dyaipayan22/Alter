@@ -10,6 +10,8 @@ import {
 const initialState = {
   allProducts: null,
   productInfo: null,
+  search: '',
+  sort: {},
   loading: false,
   productError: null,
 };
@@ -17,7 +19,14 @@ const initialState = {
 const productSlice = createSlice({
   name: 'product',
   initialState,
-  reducers: {},
+  reducers: {
+    searchProduct: (state, action) => {
+      state.search = action.payload;
+    },
+    sortBy: (state, action) => {
+      state.sort = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -66,5 +75,7 @@ const productSlice = createSlice({
       });
   },
 });
+
+export const { searchProduct, sortBy } = productSlice.actions;
 
 export default productSlice.reducer;

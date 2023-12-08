@@ -7,6 +7,7 @@ import Input from '../components/inputs/Input';
 
 import { login } from '../features/auth/authApi';
 import Form from '../components/form/Form';
+import Button from '../components/ui/Button';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,10 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleSignIn = () => {
+    window.open('http://localhost:8000/auth/google', '_self');
+  };
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
@@ -56,6 +61,7 @@ const SignIn = () => {
         register={register}
         errors={errors}
       />
+      <Button label={'Google'} onClick={handleGoogleSignIn} />
     </div>
   );
 

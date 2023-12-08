@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: 'user',
     },
+    googleSignup: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -31,12 +35,15 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+  if (!this.isModified('password') && !this.googleSignup) {
     next();
   }
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  if (!googleSignup) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
 });
 
 const User = mongoose.model('User', userSchema);
