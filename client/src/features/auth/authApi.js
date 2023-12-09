@@ -25,3 +25,26 @@ export const login = createAsyncThunk(
     }
   }
 );
+
+export const googleLogin = createAsyncThunk(
+  'auth/googleLogin',
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axiosPublic.get('/auth/google', {
+        withCredentials: true,
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
+      dispatch(getUserProfile());
+      localStorage.setItem(
+        'access_token',
+        JSON.stringify(response?.data?.accessToken)
+      );
+      return response?.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error?.response?.data?.message);
+    }
+  }
+);

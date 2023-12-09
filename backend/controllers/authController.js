@@ -12,12 +12,16 @@ import {
 
 dotenv.config();
 
+//@desc   Google login
+//@route  GET /google
+//@access Public
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
+      scope: ['profile', 'email'],
     },
     async (accessToken, refreshToken, profile, done) => {
       const existingUser = await User.findOne({
@@ -31,15 +35,39 @@ passport.use(
         email: profile.emails[0].value,
         image: profile.photos[0].value,
         googleSignup: true,
+        role: 'user',
       });
 
-      accessToken = generateAccessToken(newUser._id, newUser.role);
-      refreshToken = generateRefreshToken(newUser._id);
-
-      return done(null, { accessToken, role });
+      return done(null, newUser);
     }
   )
 );
+
+//@desc   Google login success
+//@route  GET /google/login/success
+//@access Public
+export const successGoogleLogin = expressAsyncHandler(async (req, res) => {
+  const role = req.user?.role;
+  const accessToken = generateAccessToken(req.user._id, role);
+  const refreshToken = generateRefreshToken(req.user._id);
+
+  res.cookie('jwt', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.json({ accessToken, role });
+});
+
+//@desc   Google login failed
+//@route  GET /google/login/failed
+//@access Public
+export const failedGoogleLogin = expressAsyncHandler(async (req, res) => {
+  res.status(403);
+  throw new Error('Not authorized');
+});
 
 //@desc   Login user
 //@route  POST /

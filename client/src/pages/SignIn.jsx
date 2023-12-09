@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 import Input from '../components/inputs/Input';
 
-import { login } from '../features/auth/authApi';
+import { googleLogin, login } from '../features/auth/authApi';
 import Form from '../components/form/Form';
 import Button from '../components/ui/Button';
 
@@ -39,7 +39,16 @@ const SignIn = () => {
     }
   };
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
+    // try {
+    //   const response = await dispatch(googleLogin()).unwrap();
+    //   if (response) {
+    //     toast.success('Logged in successfully!');
+    //     setTimeout(() => navigate(from, { replace: true }), 1000);
+    //   }
+    // } catch (error) {
+    //   toast.error(error);
+    // }
     window.open('http://localhost:8000/auth/google', '_self');
   };
 

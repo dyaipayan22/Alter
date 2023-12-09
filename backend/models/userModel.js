@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: [true, 'Email cannot be empty'],
     },
-    password: { type: String, required: [true, 'Password cannot be empty'] },
+    password: { type: String },
     image: { type: String, required: true, default: 'placeholder.jpg' },
     role: {
       type: String,
@@ -34,12 +34,19 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+userSchema.path('password').required(function () {
+  return !this.googleSignup;
+}, 'Password cannot be empty');
+
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password') && !this.googleSignup) {
     next();
   }
 
-  if (!googleSignup) {
+  if (!this.googleSignup) {
+    if (!this.password) {
+      return next(new Error('Password cannot be empty'));
+    }
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
   }

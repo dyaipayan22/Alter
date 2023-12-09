@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from './authApi';
+import { login, googleLogin } from './authApi';
 
 const initialState = {
   authInfo: null,
@@ -25,6 +25,17 @@ const authSlice = createSlice({
         state.authInfo = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.authError = action.payload;
+      })
+      .addCase(googleLogin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authInfo = action.payload;
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
         state.loading = false;
         state.authError = action.payload;
       });

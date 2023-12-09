@@ -1,35 +1,46 @@
-import { Link } from 'react-router-dom';
-import image1 from '/src/assets/image.jpg';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const ProductCard = ({
-  _id,
-  name,
-  image,
-  category,
-  brand,
-  gender,
-  variants,
-  description,
-  rating,
-  numReviews,
-  price,
-  stock,
-  reviews,
-}) => {
+import image1 from '/src/assets/image.jpg';
+import { selectedProduct } from '../../features/product/productSlice';
+
+const ProductCard = (product) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const {
+    _id,
+    name,
+    image,
+    category,
+    brand,
+    gender,
+    variants,
+    description,
+    rating,
+    numReviews,
+    price,
+    stock,
+    reviews,
+  } = product;
+
+  const handleClick = () => {
+    dispatch(selectedProduct(product));
+    navigate(`/${name}/${_id}`);
+  };
+
   return (
     <div className="bg-white rounded-md items-center">
-      <Link to={`/${name}/${_id}`}>
-        <div className="flex flex-col w-full">
-          <img
-            src={image1}
-            alt={name}
-            className="w-[210px] h-[280px] object-cover"
-          />
-          <div className="p-4 bg-white">
-            <span>{name}</span>
-          </div>
+      <div className="flex flex-col w-full" onClick={handleClick}>
+        <img
+          src={image1}
+          alt={name}
+          className="w-[210px] h-[280px] object-cover"
+        />
+        <div className="p-4 bg-white">
+          <span>{name}</span>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

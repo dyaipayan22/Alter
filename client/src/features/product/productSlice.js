@@ -20,6 +20,9 @@ const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    selectedProduct: (state, action) => {
+      state.productInfo = action.payload;
+    },
     searchProduct: (state, action) => {
       state.search = action.payload;
     },
@@ -35,6 +38,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.allProducts = action.payload;
+        state.productInfo = null;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
@@ -76,6 +80,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { searchProduct, sortBy } = productSlice.actions;
+export const { searchProduct, sortBy, selectedProduct } = productSlice.actions;
 
 export default productSlice.reducer;

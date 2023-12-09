@@ -7,6 +7,7 @@ import Product from '../models/productModel.js';
 // @access  Private
 export const addToCart = expressAsyncHandler(async (req, res) => {
   const { product, quantity, size } = req.body;
+  // console.log(product, quantity, size);
 
   let cart = await Cart.findOne({ user: req.user._id });
 

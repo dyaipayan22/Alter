@@ -6,11 +6,27 @@ import { getItems } from '../features/cart/cartApi';
 const Checkout = () => {
   const dispatch = useDispatch();
 
+  const { cartItems, loading, cartError } = useSelector((state) => state.cart);
+
   useEffect(() => {
     dispatch(getItems());
   }, [dispatch]);
 
-  return <div>Checkout</div>;
+  if (loading) {
+    return <div className="text-4xl">Loading...</div>;
+  }
+
+  return (
+    <div>
+      {cartItems &&
+        cartItems?.map((item, index) => (
+          <div key={index}>
+            <span>{item.product.name}</span>
+            <span>{item.quantity}</span>
+          </div>
+        ))}
+    </div>
+  );
 };
 
 export default Checkout;

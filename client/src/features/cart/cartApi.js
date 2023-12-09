@@ -3,10 +3,10 @@ import { axiosPrivate } from '../../api/axios';
 
 export const addItem = createAsyncThunk(
   'cart/addItem',
-  async ({ productId, quantity, size }, { rejectWithValue }) => {
+  async ({ product, quantity, size }, { rejectWithValue }) => {
     try {
       const response = await axiosPrivate.post('/cart/add', {
-        product: productId,
+        product,
         quantity,
         size,
       });

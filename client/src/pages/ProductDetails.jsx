@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,7 +5,6 @@ import toast from 'react-hot-toast';
 
 import Radio from '../components/inputs/Radio';
 import Button from '../components/ui/Button';
-import { fetchProduct } from '../features/product/productApi';
 import Counter from '../components/inputs/Counter';
 import Gallery from '../components/image/Gallery';
 import Rating from '../components/Rating';
@@ -60,14 +58,15 @@ const ProductDetails = () => {
     });
   };
 
-  useEffect(() => {
-    dispatch(fetchProduct(productId));
-  }, [dispatch, productId]);
-
   const buyNow = async (values) => {
-    // await dispatch(addToCart({ product: productId, quantity }));
-    // navigate('/checkout');
-    console.log(values);
+    const { quantity, size } = values;
+    const response = await dispatch(
+      addItem({ product: _id, quantity, size })
+    ).unwrap();
+    if (response) {
+      navigate('/checkout');
+    }
+    // console.log(values);
   };
 
   const addToBag = async () => {
