@@ -15,6 +15,7 @@ const orderSchema = mongoose.Schema(
           ref: 'Product',
         },
         quantity: { type: Number, required: true },
+        size: { type: String, required: true },
       },
     ],
     // shippingAddress: {
@@ -23,24 +24,25 @@ const orderSchema = mongoose.Schema(
     //   postalCode: { type: String, required: true },
     //   country: { type: String, required: true },
     // },
-    // paymentMethod: {
-    //   type: String,
-    //   required: true,
-    // },
+    paymentMethod: {
+      type: String,
+      required: true,
+      default: 'Card',
+    },
     // paymentResult: {
     //   id: { type: String },
     //   status: { type: String },
     //   update_time: { type: String },
     //   email_address: { type: String },
     // },
-    // taxPrice: {
-    //   type: Number,
-    //   default: 0.0,
-    // },
-    // shippingPrice: {
-    //   type: Number,
-    //   default: 0.0,
-    // },
+    taxPrice: {
+      type: Number,
+      default: 0.0,
+    },
+    shippingPrice: {
+      type: Number,
+      default: 0.0,
+    },
     totalPrice: {
       type: Number,
       required: true,
@@ -51,16 +53,11 @@ const orderSchema = mongoose.Schema(
     //   required: true,
     //   default: false,
     // },
-    // paidAt: {
-    //   type: Date,
-    // },
+
     // isDelivered: {
     //   type: Boolean,
     //   required: true,
     //   default: false,
-    // },
-    // deliveredAt: {
-    //   type: Date,
     // },
   },
   {

@@ -7,11 +7,11 @@ const Checkout = () => {
   const dispatch = useDispatch();
 
   const { cartItems, loading, cartError } = useSelector((state) => state.cart);
+  console.log(cartItems);
 
   useEffect(() => {
     dispatch(getItems());
   }, [dispatch]);
-
   if (loading) {
     return <div className="text-4xl">Loading...</div>;
   }
@@ -30,3 +30,14 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+/**
+ *       {cartItems &&
+        cartItems?.map((item, index) => (
+          <div key={index}>
+            <span>{item.product.name}</span>
+            <span>{item.quantity}</span>
+          </div>
+        ))}
+
+ */

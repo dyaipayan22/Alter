@@ -64,7 +64,9 @@ const ProductDetails = () => {
       addItem({ product: _id, quantity, size })
     ).unwrap();
     if (response) {
-      navigate('/checkout');
+      setTimeout(() => {
+        navigate('/checkout');
+      }, 300);
     }
     // console.log(values);
   };

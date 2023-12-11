@@ -9,7 +9,11 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
   const { product, quantity, size } = req.body;
   // console.log(product, quantity, size);
 
-  let cart = await Cart.findOne({ user: req.user._id });
+  let cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: 'cartItems.product',
+    select: '_id name image price category gender',
+    model: 'Product',
+  });
 
   if (!cart) {
     cart = new Cart({
@@ -39,7 +43,7 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
     });
   }
   await cart.save();
-  res.json({ message: 'Item added to cart' });
+  res.json(cart.cartItems);
 });
 
 // @desc    Remove item to cart
@@ -48,7 +52,11 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
 export const removeFromCart = expressAsyncHandler(async (req, res) => {
   const { product } = req.body;
 
-  const cart = await Cart.findOne({ user: req.user._id });
+  const cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: 'cartItems.product',
+    select: '_id name image price category gender',
+    model: 'Product',
+  });
 
   if (!cart) {
     res.status(404);
@@ -66,14 +74,18 @@ export const removeFromCart = expressAsyncHandler(async (req, res) => {
 
   cart.cartItems.splice(itemIndex, 1);
   await cart.save();
-  res.json({ message: 'Item removed from cart' });
+  res.json(cart.cartItems);
 });
 
 // @desc    Clear cart
 // @route   PUT /api/cart/clear
 // @access  Private
 export const clearCart = expressAsyncHandler(async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user._id });
+  const cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: 'cartItems.product',
+    select: '_id name image price category gender',
+    model: 'Product',
+  });
 
   if (!cart) {
     res.status(404);
@@ -83,7 +95,7 @@ export const clearCart = expressAsyncHandler(async (req, res) => {
   cart.cartItems = [];
 
   await cart.save();
-  res.json({ message: 'Cart cleared' });
+  res.json(cart.cartItems);
 });
 
 // @desc    Get items from cart
@@ -92,7 +104,7 @@ export const clearCart = expressAsyncHandler(async (req, res) => {
 export const getCartItems = expressAsyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id }).populate({
     path: 'cartItems.product',
-    select: '_id name image price',
+    select: '_id name image price category gender',
     model: 'Product',
   });
 
@@ -104,6 +116,7 @@ export const getCartItems = expressAsyncHandler(async (req, res) => {
   const items = cart?.cartItems?.map((item) => ({
     product: item.product,
     quantity: item.quantity,
+    size: item.size,
   }));
 
   res.json(items);

@@ -38,17 +38,17 @@ const Navbar = () => {
               <span className=" text-white text-sm">1</span>
             </div>
           </div>
-          {userInfo ? (
+          {/* {userInfo ? (
             <Button label={userInfo.name} />
           ) : (
             <Button label={'Sign In'} onClick={() => navigate('/sign-in')} />
-          )}
+          )} */}
         </div>
       </div>
 
-      <div onClick={toggleView} className="inline-block lg:hidden ">
+      {/* <div onClick={toggleView} className="inline-block lg:hidden ">
         {showMobileNav ? <X /> : <Menu />}
-      </div>
+      </div> */}
     </div>
   );
 };

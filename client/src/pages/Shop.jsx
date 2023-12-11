@@ -19,7 +19,7 @@ const Shop = () => {
     //   </div>
     // </div>
     <div className="w-full h-full flex gap-8">
-      <div className="w-1/5 bg-white/70 rounded-md p-4">
+      <div className="w-1/5 bg-white/70 rounded-md p-4 hidden lg:block">
         <FilterSection />
       </div>
       <div className="grow">
