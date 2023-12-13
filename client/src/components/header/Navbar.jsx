@@ -1,55 +1,94 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Menu, ShoppingCart, X } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Menu, ShoppingCart, User, X } from 'lucide-react';
 
 import { NAV_LINKS } from '../../utils/constants';
 
 import Button from '../ui/Button';
-import Cart from '../../pages/Cart';
 import Search from '../Search';
+import { cn } from '../../lib/utils';
+import { getItems } from '../../features/cart/cartApi';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [showMobileNav, setShowMobileNav] = useState(false);
   const userInfo = useSelector((state) => state.user.userInfo);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
-  const toggleView = () => {
-    setShowMobileNav(!showMobileNav);
-  };
+  useEffect(() => {
+    dispatch(getItems());
+  }, [dispatch]);
+
   return (
-    <div className="relative bg-primary text-secondary w-full flex items-center container py-3 z-30 border-2 lg:justify-between lg:gap-12">
-      <Link to={'/'}>Alter</Link>
+    <nav className="bg-white container shadow-md">
+      <div className="flex items-center justify-between h-14 lg:h-16">
+        <div className="grow flex items-center gap-8">
+          <section className="flex items-center gap-4">
+            <Menu
+              className="cursor-pointer lg:hidden w-5 h-5"
+              onClick={() => setShowMobileNav(true)}
+            />
+            <Link to={'/'} className="text-3xl">
+              Alter
+            </Link>
+          </section>
 
-      <div className="flex grow items-center justify-between">
-        <ul className="hidden lg:flex lg:gap-8">
-          {NAV_LINKS?.map((item) => (
-            <Link to={item.link} key={item.label}>
-              <span className="hover:font-bold">{item.label}</span>
+          {NAV_LINKS.map((item) => (
+            <Link
+              key={item.link}
+              className="hidden lg:block text-sm uppercase font-medium"
+              to={item.link}
+            >
+              {item.label}
             </Link>
           ))}
-        </ul>
-        <Search />
-        <div className="flex items-center gap-8">
-          <div className="relative">
-            <ShoppingCart />
-            <div className="absolute right-0 -top-2 bg-red-300 w-4 h-4 flex items-center justify-center rounded-full">
-              <span className=" text-white text-sm">1</span>
-            </div>
-          </div>
-          {/* {userInfo ? (
-            <Button label={userInfo.name} />
-          ) : (
-            <Button label={'Sign In'} onClick={() => navigate('/sign-in')} />
-          )} */}
+          <Search />
         </div>
-      </div>
 
-      {/* <div onClick={toggleView} className="inline-block lg:hidden ">
-        {showMobileNav ? <X /> : <Menu />}
-      </div> */}
-    </div>
+        <div
+          className={cn(
+            'fixed h-full w-screen lg:hidden top-0 right-0 -translate-x-full transition-all z-40',
+            showMobileNav && 'bg-black/50 backdrop-blur-sm translate-x-0'
+          )}
+        >
+          <section className="bg-white text-black flex-col absolute top-0 h-screen p-8 gap-4 z-50 w-4/5 flex">
+            <X
+              className="cursor-pointer mt-0 mb-8 w-5 h-5"
+              onClick={() => setShowMobileNav(false)}
+            />
+            <Search />
+            {NAV_LINKS.map((item) => (
+              <Link key={item.link} className="font-bold" to={item.link}>
+                {item.label}
+              </Link>
+            ))}
+          </section>
+        </div>
+
+        <section className="flex items-center gap-8">
+          <div className="hidden relative w-10 h-10 lg:flex items-center cursor-pointer">
+            <ShoppingCart className="h-[20px] w-[20px]" />
+            {cartItems !== null && (
+              <span className="absolute top-0 right-2 w-5 h-5 bg-primary-200 text-background-200 flex items-center rounded-full justify-center text-xs font-bold">
+                {cartItems.length}
+              </span>
+            )}
+          </div>
+          {userInfo ? (
+            <span>{userInfo.name}</span>
+          ) : (
+            <Button
+              label={'Sign In'}
+              onClick={() => navigate('/sign-in')}
+              size={'lg'}
+            />
+          )}
+        </section>
+      </div>
+    </nav>
   );
 };
 

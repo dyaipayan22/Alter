@@ -18,8 +18,8 @@ const DisplayProducts = () => {
   }, [dispatch, search, sort]);
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-6 mx-auto">
+    <div className="w-full flex flex-col gap-4 lg:border-l border-l-background-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mx-auto">
         {loading ? (
           [1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
             <ProductCardSkeleton key={index} />

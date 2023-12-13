@@ -3,20 +3,19 @@ import dotenv from 'dotenv';
 import expressAsyncHandler from 'express-async-handler';
 
 dotenv.config();
-const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY);
+
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripePayment = expressAsyncHandler(async (req, res) => {
   try {
-    const user = req.user;
-    const { items } = req.body;
-
-    const lineItems = items.map((item) => ({
+    const { cartItems } = req.body;
+    const lineItems = cartItems.map((item) => ({
       price_data: {
         currency: 'inr',
         product_data: {
-          name: item.name,
+          name: item.product.name,
         },
-        unit_amount: item.price,
+        unit_amount: item.product.price * 100,
       },
       quantity: item.quantity,
     }));

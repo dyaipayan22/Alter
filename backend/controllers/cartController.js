@@ -64,7 +64,7 @@ export const removeFromCart = expressAsyncHandler(async (req, res) => {
   }
 
   const itemIndex = cart.cartItems.findIndex(
-    (item) => item.product.toString() === product
+    (item) => item.product._id.toString() === product
   );
 
   if (itemIndex === -1) {

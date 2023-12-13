@@ -1,15 +1,33 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 import { getItems } from '../features/cart/cartApi';
 import CartCardSkeleton from '../components/skeleton/CartCardSkeleton';
 import CartCard from '../components/cards/CartCard';
 import Button from '../components/ui/Button';
+import { axiosPrivate } from '../api/axios';
 
 const Cart = () => {
   const dispatch = useDispatch();
 
   const { cartItems, loading, cartError } = useSelector((state) => state.cart);
+
+  const handlePayment = async () => {
+    try {
+      const { data } = await axiosPrivate.post(
+        '/payment/create-checkout-session',
+        {
+          cartItems,
+        }
+      );
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      toast.error('Something went wrong!');
+    }
+  };
 
   useEffect(() => {
     dispatch(getItems());
@@ -47,12 +65,13 @@ const Cart = () => {
             <div className="flex flex-col gap-2 text-right font-bold">
               <span>
                 Rs.{' '}
-                {cartItems
-                  .reduce(
-                    (acc, item) => acc + item.quantity * item.product.price,
-                    0
-                  )
-                  .toFixed(2)}
+                {cartItems &&
+                  cartItems
+                    .reduce(
+                      (acc, item) => acc + item.quantity * item.product.price,
+                      0
+                    )
+                    .toFixed(2)}
               </span>
               <span>Free</span>
               <span>Rs. 0</span>
@@ -63,16 +82,17 @@ const Cart = () => {
             <span className="font-medium">Total</span>
             <span className="font-bold">
               Rs.{' '}
-              {cartItems
-                .reduce(
-                  (acc, item) => acc + item.quantity * item.product.price,
-                  0
-                )
-                .toFixed(2)}
+              {cartItems &&
+                cartItems
+                  .reduce(
+                    (acc, item) => acc + item.quantity * item.product.price,
+                    0
+                  )
+                  .toFixed(2)}
             </span>
           </div>
         </div>
-        <Button label={'Proceed to Pay'} />
+        <Button label={'Proceed to Pay'} onClick={handlePayment} />
       </div>
     </div>
   );

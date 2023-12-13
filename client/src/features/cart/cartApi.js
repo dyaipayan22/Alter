@@ -24,7 +24,7 @@ export const removeItem = createAsyncThunk(
   'cart/removeItem',
   async (product, { rejectWithValue }) => {
     try {
-      const response = await axiosPrivate.put('/card/remove', {
+      const response = await axiosPrivate.put('/cart/remove', {
         product,
       });
       return response?.data;

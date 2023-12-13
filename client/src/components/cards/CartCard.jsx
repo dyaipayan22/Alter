@@ -1,9 +1,16 @@
+import { useDispatch } from 'react-redux';
 import image1 from '/src/assets/image.jpg';
-import { X } from 'lucide-react';
+import { Trash2, X } from 'lucide-react';
+import { removeItem } from '../../features/cart/cartApi';
 
 const CartCard = (cartItem) => {
+  const dispatch = useDispatch();
   const { quantity, size } = cartItem;
   const { _id, name, image, price, category, gender } = cartItem.product;
+
+  const removeCartItem = () => {
+    dispatch(removeItem(_id));
+  };
   return (
     <div className="relative w-full bg-white rounded-md flex md:grid md:grid-cols-5 gap-2 h-[120px] md:h-auto p-2">
       <div className=" flex md:col-span-2 gap-4">
@@ -35,6 +42,10 @@ const CartCard = (cartItem) => {
       <span className="hidden md:block font-bold my-auto">
         Rs. {quantity * price}
       </span>
+      <Trash2
+        className="absolute h-4 w-4 right-4 top-3 cursor-pointer"
+        onClick={removeCartItem}
+      />
     </div>
   );
 };
