@@ -49,6 +49,7 @@ const Form = ({
             label={actionLabel}
             onClick={handleSubmit}
             disabled={disabled}
+            className={'w-full'}
           />
         </div>
         {footer}

@@ -10,7 +10,6 @@ export const fetchProducts = createAsyncThunk(
       const response = await axiosPublic.get('/product', config);
       return response?.data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -59,6 +58,25 @@ export const deleteProduct = createAsyncThunk(
       const response = await axiosPrivate.delete(`/product/${productId}`);
       return response?.data;
     } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const reviewProduct = createAsyncThunk(
+  'product/createReview',
+  async ({ productId, rating, comment }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axiosPrivate.post(`/product/${productId}/review`, {
+        rating,
+        comment,
+      });
+      if (response) {
+        dispatch(fetchProducts());
+      }
+      return response?.data;
+    } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data.message);
     }
   }

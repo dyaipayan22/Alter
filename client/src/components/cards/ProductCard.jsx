@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { FaStar } from 'react-icons/fa';
-import image1 from '/src/assets/image.jpg';
 import { selectedProduct } from '../../features/product/productSlice';
 
 const ProductCard = (product) => {
@@ -12,7 +11,7 @@ const ProductCard = (product) => {
   const {
     _id,
     name,
-    image,
+    images,
     category,
     brand,
     gender,
@@ -34,7 +33,7 @@ const ProductCard = (product) => {
     <div className="w-[210px] overflow-hidden cursor-pointer hover:shadow-md transition-all duration-300 bg-white">
       <div className="relative flex flex-col" onClick={handleClick}>
         <img
-          src={image1}
+          src={images[1].secureUrl}
           alt={name}
           className=" w-[210px] h-[280px] object-cover"
         />
@@ -51,7 +50,7 @@ const ProductCard = (product) => {
             <span className="text-xs font-semibold p-1">{rating}</span>
             <FaStar className="w-3 h-3 text-accent-100" />
             <span className="before:content-['|_'] text-xs font-semibold p-1">
-              {rating}
+              {numReviews >= 1000 ? numReviews / 1000 + 'k' : numReviews}
             </span>
           </div>
         </div>

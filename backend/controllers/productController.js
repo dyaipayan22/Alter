@@ -17,6 +17,8 @@ export const getProducts = expressAsyncHandler(async (req, res) => {
       }
     : {};
 
+  const featured = req.query.featured ? true : false;
+
   let sortBy = { rating: -1 };
   if (req.query.sort) {
     const parts = req.query.sort.split(':');
@@ -172,7 +174,7 @@ export const createProductReview = expressAsyncHandler(async (req, res) => {
       product.reviews.length;
 
     await product.save();
-    res.status(201).json({ message: 'Review added' });
+    res.status(201).json(product);
   } else {
     res.status(404);
     throw new Error('Product not found');

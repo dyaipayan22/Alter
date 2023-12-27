@@ -1,12 +1,12 @@
-import React from 'react';
-import useRefreshToken from '../hooks/useRefreshToken';
+import Carousel from '../components/Carousel';
 
 const Home = () => {
-  const refresh = useRefreshToken();
   return (
-    <div>
-      Home
-      <button onClick={() => refresh()}>Refresh</button>
+    <div className="flex flex-col gap-4">
+      <Carousel />
+      <div className="flex flex-col">
+        <h1 className="text-lg font-semibold">Featured</h1>
+      </div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripePayment = expressAsyncHandler(async (req, res) => {
   try {
-    const { cartItems } = req.body;
+    const { cartItems, orderId } = req.body;
     const lineItems = cartItems.map((item) => ({
       price_data: {
         currency: 'inr',
@@ -24,7 +24,7 @@ export const stripePayment = expressAsyncHandler(async (req, res) => {
       line_items: lineItems,
       mode: 'payment',
       payment_method_types: ['card'],
-      success_url: `${process.env.CLIENT_URL}/success`,
+      success_url: `${process.env.CLIENT_URL}/${orderId}/success`,
       cancel_url: `${process.env.CLIENT_URL}/cart`,
     });
 

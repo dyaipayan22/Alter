@@ -7,11 +7,10 @@ import Product from '../models/productModel.js';
 // @access  Private
 export const addToCart = expressAsyncHandler(async (req, res) => {
   const { product, quantity, size } = req.body;
-  // console.log(product, quantity, size);
 
   let cart = await Cart.findOne({ user: req.user._id }).populate({
     path: 'cartItems.product',
-    select: '_id name image price category gender',
+    select: '_id name images price category gender',
     model: 'Product',
   });
 
@@ -21,17 +20,13 @@ export const addToCart = expressAsyncHandler(async (req, res) => {
       cartItems: [],
     });
   }
-
-  const productExists = await Product.findById(product);
-
-  if (!productExists) {
-    res.status(404);
-    throw new Error('Product not found');
-  }
-
-  const existingItem = cart.cartItems.find(
-    (item) => item.product.toString() === product && item.size === size
-  );
+  const existingItem = cart.cartItems.find((item) => {
+    return (
+      item.product &&
+      item.product._id.toString() === product &&
+      item.size === size
+    );
+  });
 
   if (existingItem) {
     existingItem.quantity += quantity;
@@ -54,7 +49,7 @@ export const removeFromCart = expressAsyncHandler(async (req, res) => {
 
   const cart = await Cart.findOne({ user: req.user._id }).populate({
     path: 'cartItems.product',
-    select: '_id name image price category gender',
+    select: '_id name images price category gender',
     model: 'Product',
   });
 
@@ -83,7 +78,7 @@ export const removeFromCart = expressAsyncHandler(async (req, res) => {
 export const clearCart = expressAsyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id }).populate({
     path: 'cartItems.product',
-    select: '_id name image price category gender',
+    select: '_id name images price category gender',
     model: 'Product',
   });
 
@@ -104,7 +99,7 @@ export const clearCart = expressAsyncHandler(async (req, res) => {
 export const getCartItems = expressAsyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id }).populate({
     path: 'cartItems.product',
-    select: '_id name image price category gender',
+    select: '_id name images price category gender',
     model: 'Product',
   });
 

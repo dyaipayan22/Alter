@@ -5,6 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  reviewProduct,
 } from './productApi';
 
 const initialState = {
@@ -74,6 +75,17 @@ const productSlice = createSlice({
         state.productInfo = action.payload;
       })
       .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.productError = action.payload;
+      })
+      .addCase(reviewProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(reviewProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.productInfo = action.payload;
+      })
+      .addCase(reviewProduct.rejected, (state, action) => {
         state.loading = false;
         state.productError = action.payload;
       });

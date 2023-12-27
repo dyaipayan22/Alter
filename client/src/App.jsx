@@ -9,10 +9,11 @@ import Shop from './pages/Shop';
 import About from './pages/About';
 import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
-import Cart from './pages/Cart';
 import AddProduct from './pages/admin/AddProduct';
 import Products from './pages/admin/Products';
 import Unauthorized from './pages/Unauthorized';
+import Dashboard from './pages/admin/Dashboard';
+import PaymentSuccess from './pages/PaymentSuccess';
 
 const App = () => {
   return (
@@ -26,17 +27,18 @@ const App = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/:name/:productId" element={<ProductDetails />} />
           <Route path="/about" element={<About />} />
+          <Route path="/:orderId/success" element={<PaymentSuccess />} />
 
           <Route element={<RequireAuth allowedRole={'user'} />}>
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/cart" element={<Cart />} />
           </Route>
         </Route>
 
         <Route element={<AdminLayout />}>
           <Route element={<RequireAuth allowedRole={'admin'} />}>
             <Route path="/admin/product/add" element={<AddProduct />} />
-            <Route path="/admin/products" element={<Products />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Route>
       </Routes>

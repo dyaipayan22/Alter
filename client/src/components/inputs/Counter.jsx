@@ -20,7 +20,7 @@ const Counter = ({ value = 1, maxValue, onChange }) => {
   }, [onChange, value]);
 
   return (
-    <div className="flex items-center gap-2 border p-2">
+    <div className="flex items-center gap-2 border p-2 max-w-fit">
       <div
         onClick={onReduce}
         className=" 
@@ -39,7 +39,7 @@ const Counter = ({ value = 1, maxValue, onChange }) => {
       >
         <AiOutlineMinus />
       </div>
-      {value}
+      <span className="font-semibold">{value}</span>
       <div
         onClick={onAdd}
         className=" 

@@ -20,7 +20,7 @@ router.route('/featured').get(getFeaturedProducts);
 
 router.use(verifyJWT);
 
-router.route('/review').post(createProductReview);
+router.route('/:id/review').post(createProductReview);
 
 router.use(admin);
 

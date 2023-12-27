@@ -53,11 +53,12 @@ const SignIn = () => {
   };
 
   const bodyContent = (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 text-sm">
       <Input
         id="email"
         label="Email"
         type="text"
+        placeholer={'user@alter.com'}
         disabled={isSubmitting}
         register={register}
         errors={errors}
@@ -66,18 +67,25 @@ const SignIn = () => {
         id="password"
         label="Password"
         type="text"
+        placeholer={'A2bc@70b6'}
         disabled={isSubmitting}
         register={register}
         errors={errors}
       />
-      <Button label={'Google'} onClick={handleGoogleSignIn} />
+      {/* <Button label={'Google'} onClick={handleGoogleSignIn} /> */}
     </div>
   );
 
   const footerContent = (
     <div className="w-full ">
-      <p className="text-center text-sm">
-        Don't have an account? <a href="/sign-up">Sign up</a>
+      <p className="text-center text-sm font-medium">
+        Don't have an account?{' '}
+        <a
+          href="/sign-up"
+          className="hover:text-blue-700 hover:underline hover:underline-offset-2"
+        >
+          Sign up
+        </a>
       </p>
     </div>
   );
