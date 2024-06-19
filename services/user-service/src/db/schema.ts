@@ -30,7 +30,8 @@ export const addressRelations = relations(address, ({ one }) => ({
   }),
 }));
 
-export const schema = 4;
-
+export type UserInput = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type Address = typeof address.$inferSelect;
+
+export const schema = 4;
