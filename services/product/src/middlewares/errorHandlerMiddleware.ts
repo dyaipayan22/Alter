@@ -3,7 +3,8 @@ import {
   AuthorizationError,
   NotFoundError,
   ValidationError,
-} from '@/utils/error/errors';
+} from '../utils/error/errors';
+import logger from '../utils/logger';
 
 export const errorHandler = (
   error: Error,
@@ -26,11 +27,9 @@ export const errorHandler = (
   );
 
   if (reportError) {
-    // logger.error(error);
-    console.error(error);
+    logger.error(error);
   } else {
-    // logger.warn(error);
-    console.warn(error);
+    logger.warn(error);
   }
 
   return res.status(status).json(data);

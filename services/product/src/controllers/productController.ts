@@ -1,4 +1,4 @@
-import { IProductInteractor } from '@/interfaces/IProductInteractor';
+import { IProductInteractor } from '../interfaces/IProductInteractor';
 import { NextFunction, Request, Response } from 'express';
 
 export class ProductController {

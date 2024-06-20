@@ -1,4 +1,4 @@
-import { Product } from '@/db/schema';
+import { Product } from '../db/schema';
 
 export interface IProductInteractor {
   createProduct(productData: any): Promise<Product>;

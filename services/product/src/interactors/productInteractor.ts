@@ -1,5 +1,5 @@
-import { IProductInteractor } from '@/interfaces/IProductInteractor';
-import { IProductRepository } from '@/interfaces/IProductRepository';
+import { IProductInteractor } from '../interfaces/IProductInteractor';
+import { IProductRepository } from '../interfaces/IProductRepository';
 
 export class ProductInteractor implements IProductInteractor {
   private repository: IProductRepository;

@@ -2,14 +2,20 @@
   "name": "product",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon",
+    "start": "node dist/server.js",
+    "build": "tsc -b",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.10.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.31.2",
@@ -24,6 +30,7 @@
     "@types/node": "^20.14.5",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.7",
-    "nodemon": "^3.1.2"
+    "nodemon": "^3.1.2",
+    "ts-node": "^10.9.2"
   }
 }

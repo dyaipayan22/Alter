@@ -1,5 +1,5 @@
 import { createLogger, transports, format } from 'winston';
-const { combine, timestamp, printf, prettyPrint } = format;
+const { combine, timestamp, printf, prettyPrint, colorize } = format;
 
 const logger = createLogger({
   transports: [new transports.Console()],
@@ -7,8 +7,7 @@ const logger = createLogger({
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     printf(({ timestamp, level, message }) => {
       return `${timestamp} ${level} ${message}`;
-    }),
-    prettyPrint()
+    })
   ),
 });
 

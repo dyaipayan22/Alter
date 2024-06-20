@@ -1,0 +1,15 @@
+services:
+  product-db:
+    image: postgres:16-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: product-db
+    volumes:
+      - product-service-db:/var/lib/postgresql/data
+
+volumes:
+  product-service-db:

@@ -1,6 +1,6 @@
-import database from '@/db';
-import { Product, products } from '@/db/schema';
-import { IProductRepository } from '@/interfaces/IProductRepository';
+import database from '../db';
+import { Product, products } from '../db/schema';
+import { IProductRepository } from '../interfaces/IProductRepository';
 import { eq } from 'drizzle-orm';
 
 export class ProductRepository implements IProductRepository {
