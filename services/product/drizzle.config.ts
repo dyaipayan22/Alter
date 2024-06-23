@@ -8,7 +8,9 @@ export default defineConfig({
   schema: './src/db/schema.ts',
   out: './src/db/migrations',
   dbCredentials: {
-    url: process.env.DATABASE_URL as string,
+    url:
+      (process.env.DATABASE_URL as string) ||
+      'postgresql://postgres:mysecretpassword@localhost:5432/products',
   },
   verbose: true,
   strict: true,
