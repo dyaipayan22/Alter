@@ -5,8 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1718916004458,
-      "tag": "0000_added product schema",
+      "when": 1719320740805,
+      "tag": "0000_added product and category schema",
       "breakpoints": true
     }
   ]

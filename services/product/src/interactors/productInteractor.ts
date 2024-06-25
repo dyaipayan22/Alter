@@ -12,8 +12,9 @@ export class ProductInteractor implements IProductInteractor {
     const product = await this.repository.create(productData);
     return product;
   }
-  async updateProduct() {
-    return {};
+  async updateProduct(productId: string, productData: any) {
+    const updatedProduct = await this.repository.update(productId, productData);
+    return updatedProduct;
   }
 
   async getProductById(productId: string) {

@@ -38,3 +38,9 @@ export class NotFoundError extends BaseError {
     super('Not Found', STATUS_CODES.NOT_FOUND, message);
   }
 }
+
+export class ZodValidationError extends BaseError {
+  constructor(message = 'Schema validation failed') {
+    super('Validation Error', STATUS_CODES.ZOD_VALIDATION_ERROR, message);
+  }
+}

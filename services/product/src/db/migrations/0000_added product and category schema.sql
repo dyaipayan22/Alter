@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS "product" (
 	"name" varchar NOT NULL,
 	"description" text NOT NULL,
 	"stock" integer NOT NULL,
-	"price" boolean NOT NULL
+	"price" numeric NOT NULL
 );
