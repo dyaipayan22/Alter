@@ -1,0 +1,26 @@
+services:
+  product-db:
+    image: postgres:16-alpine
+    restart: always
+    container_name: product-db-postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: products
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  user-db:
+    image: postgres:16-alpine
+    restart: always
+    container_name: user-db-postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: users
+    volumes:
+      - pg_data:/var/lib/postgresql/data
